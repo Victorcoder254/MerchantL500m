@@ -1,0 +1,36 @@
+{% extends 'files/base.html' %}
+{% load static %}
+{% block title %}Remittance{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Payments Remitted</h2>
+            {% if payments_remmitteds %}
+            {% for payment in payments_remmitteds %}
+            <div class="card mb-3">
+                <div class="card-header">
+                    Payment Remitted to {{ payment.business_id.business_id }} for {{ payment.user.username }}
+                </div>
+                <div class="card-body">
+                    <p><strong>Date Created:</strong> {{ payment.date_created }}</p>
+                    <p><strong>Amount:</strong> {{ payment.amount }}/=</p>
+                    <p><strong>Description:</strong> {{ payment.payment_description }}</p>
+                    <div class="card bg-success text-black mb-3">
+                        <div class="card-header"><strong>Payment Success Message</strong></div>
+                        <div class="card-body">
+                            <p>{{ payment.payment_success_message }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="alert alert-info" role="alert">
+                No payments remitted.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

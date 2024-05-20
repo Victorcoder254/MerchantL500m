@@ -1,0 +1,132 @@
+{% extends 'files/base.html' %}
+{% load static %}
+{% block title %}Make Liquidation Request{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <!-- Liquidation Requests -->
+        <div class="col-md-6"><!-- Display success message if it exists -->
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="card-title">Pending Liquidation Requests</h4>
+                </div>
+                <div class="card-body">
+                    {% if liquidation_requests %}
+                    <ul class="list-group list-group-flush">
+                        {% for request in liquidation_requests %}
+                        <li class="list-group-item">
+                            <strong>Reason:</strong> {{ request.reason_for_liquidation }}<br>
+                            <strong>Estimated Value:</strong> {{ request.estimated_value_of_goods }}/=<br>
+                            <strong>Anticipated Amount:</strong> {{ request.anticipated_amount }}/=<br>
+                            <strong>Condition of Goods:</strong> {{ request.get_condition_of_goods_display }}<br>
+                            <strong>Goods Name:</strong> {{ request.goods_name }}<br>
+                            <strong>Quantity of Goods:</strong> {{ request.quantity_goods }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p>No liquidation requests found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <!-- Form -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Make Liquidation Request</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="reason_for_liquidation" class="form-label">Reason for Liquidation</label>
+                            <textarea class="form-control" id="reason_for_liquidation" name="reason_for_liquidation" rows="3"
+                                required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="estimated_value_of_goods" class="form-label">Estimated Value of Goods</label>
+                            <input type="number" class="form-control" id="estimated_value_of_goods"
+                                name="estimated_value_of_goods" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="anticipated_amount" class="form-label">Anticipated Amount</label>
+                            <input type="number" class="form-control" id="anticipated_amount" name="anticipated_amount"
+                                required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="goods_name" class="form-label">Type Of Goods</label>
+                            <input type="text" class="form-control" id="goods_name" placeholder="Shoes, clothes, electronics" name="goods_name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="quantiy_goods" class="form-label">Quantity of Goods</label>
+                            <textarea class="form-control" id="quantity_goods" name="reason_for_liquidation" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="condition_of_goods" class="form-label">Condition of Goods</label>
+                            <select class="form-select" id="condition_of_goods" name="condition_of_goods" required>
+                                {% for choice in condition_choices %}
+                                <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <!--Processed Liquidation Requests -->
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="card-title">Processed Liquidation Requests</h4>
+                </div>
+                <div class="card-body">
+                    {% if processed_liquidation_requests %}
+                    <ul class="list-group list-group-flush">
+                        {% for request in processed_liquidation_requests %}
+                        <li class="list-group-item">
+                            <strong>Reason:</strong> {{ request.reason_for_liquidation }}<br>
+                            <strong>Estimated Value:</strong> {{ request.estimated_value_of_goods }}/=<br>
+                            <strong>Anticipated Amount:</strong> {{ request.anticipated_amount }}/=<br>
+                            <strong>Condition of Goods:</strong> {{ request.get_condition_of_goods_display }}<br>
+                            <strong>Goods Name:</strong> {{ request.goods_name }}<br>
+                            <strong>Quantity of Goods:</strong> {{ request.quantity_goods }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p>No liquidation requests found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#reason_for_liquidation').on('input', function () {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+    });
+        $(document).ready(function () {
+            $('#quantity_goods').on('input', function () {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+        });
+</script>
+
+{% endblock %}

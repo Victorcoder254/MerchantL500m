@@ -1,0 +1,59 @@
+{% extends 'files/base.html' %}
+{% load static %}
+{% block title %}Payments{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Your Payment Channels</h4>
+                </div>
+                <div class="card-body">
+                    {% if payment_details %}
+                    <ul class="list-group list-group-flush">
+                        {% for payment_channel in payment_details %}
+                        <li class="list-group-item">
+                            <strong>Bank Name:</strong> {{ payment_channel.bank_name }}<br>
+                            <strong>Bank Account Number:</strong> {{ payment_channel.bank_account_number }}
+                            <form action="{% url 'delete_payment_channel' payment_channel.pk %}" method="POST"
+                                class="mt-2">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p>No payment channels found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Add Payment Channel</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="bank_name" class="form-label">Bank Name</label>
+                            <input type="text" class="form-control" id="bank_name" name="bank_name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="bank_account_number" class="form-label">Bank Account Number</label>
+                            <input type="text" class="form-control" id="bank_account_number" name="bank_account_number"
+                                required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

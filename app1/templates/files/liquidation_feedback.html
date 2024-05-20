@@ -1,0 +1,48 @@
+{% extends 'files/base.html' %}
+{% load static %}
+{% block title %}Feedback{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <!-- Display success message if it exists -->
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            <h2>Feedback</h2>
+            {% if liquidation_feedbacks %}
+            {% for feedback in liquidation_feedbacks %}
+            <div class="card mb-3">
+                <div class="card-header">
+                    Liquidation Request Feedback - {{ feedback.liquidation_request.request_id }}
+                </div>
+                <div class="card-body">
+                    <p><strong>Proposed Price Range:</strong> {{ feedback.proposed_price_range }}</p>
+                    <p><strong>Expected Return on Goods Sold:</strong> {{ feedback.expected_return_on_goods_sold }}</p>
+                    <p><strong>Details 1:</strong> <span>{{ feedback.details1 }}</span></p>
+                    <p><strong>Details 2:</strong> <span>{{ feedback.details2 }}</span></p>
+                    <p><strong>Details 3:</strong> <span>{{ feedback.details3 }}</span></p>
+                    <p><strong>Instructions:</strong> <span style="color: orange;">{{ feedback.instructions }}</span>
+                    </p>
+                    <p><strong>Date Created:</strong> {{ feedback.date_created }}</p>
+
+                    <!-- Button to navigate to blame_liquidation_feedback -->
+                    <a href="{% url 'blame_liquidation_feedback' feedback.pk %}" class="btn btn-primary">Blame
+                        Feedback</a>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="alert alert-info" role="alert">
+                No liquidation feedbacks available.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
